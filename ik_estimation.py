@@ -61,14 +61,10 @@ def train(manager, args, model, device, train_loader):
 def test(args, model, device, data, target):
     model.eval()
     test_loss = 0
-    correct = 0
     data, target = data.to(device), target.to(device)
     output = model(data)
-    test_loss += (output - target).norm()
+    test_loss += (output - target).norm().item()
     ppe.reporting.report({"val/loss": test_loss})
-    pred = output.argmax(dim=1, keepdim=True)
-    correct += pred.eq(target.view_as(pred)).sum().item()
-    ppe.reporting.report({"val/acc": correct / len(data)})
 
 
 def main():
@@ -115,7 +111,6 @@ def main():
                 "train/loss",
                 "lr",
                 "val/loss",
-                "val/acc",
             ]
         ),
     ]
