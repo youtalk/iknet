@@ -30,7 +30,7 @@ class IKDataset(Dataset):
 class IKNet(nn.Module):
     pose = 7
     dof = 4
-    hidden_units = [200, 150, 100, 50]
+    hidden_units = [300, 200, 100, 50, 10]
 
     def __init__(self):
         super().__init__()
@@ -38,12 +38,13 @@ class IKNet(nn.Module):
         self.fc2 = nn.Linear(self.hidden_units[0], self.hidden_units[1])
         self.fc3 = nn.Linear(self.hidden_units[1], self.hidden_units[2])
         self.fc4 = nn.Linear(self.hidden_units[2], self.hidden_units[3])
-        self.fc5 = nn.Linear(self.hidden_units[3], self.dof)
+        self.fc5 = nn.Linear(self.hidden_units[3], self.hidden_units[4])
+        self.fc6 = nn.Linear(self.hidden_units[4], self.dof)
 
     def forward(self, x):
-        for layer in [self.fc1, self.fc2, self.fc3, self.fc4]:
+        for layer in [self.fc1, self.fc2, self.fc3, self.fc4, self.fc5]:
             x = F.relu(layer(x))
-        return self.fc5(x)
+        return self.fc6(x)
 
 
 def train(manager, args, model, device, train_loader):
@@ -54,17 +55,16 @@ def train(manager, args, model, device, train_loader):
                 data, target = data.to(device), target.to(device)
                 output = model(data)
                 loss = (output - target).norm()
-                ppe.reporting.report({"train/loss": loss.item()})
+                ppe.reporting.report({"train/loss": loss.item() / args.batch_size})
                 loss.backward()
 
 
 def test(args, model, device, data, target):
     model.eval()
-    test_loss = 0
     data, target = data.to(device), target.to(device)
     output = model(data)
-    test_loss += (output - target).norm().item()
-    ppe.reporting.report({"val/loss": test_loss})
+    loss = (output - target).norm()
+    ppe.reporting.report({"val/loss": loss.item() / args.batch_size})
 
 
 def main():
