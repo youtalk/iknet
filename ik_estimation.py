@@ -30,7 +30,7 @@ class IKDataset(Dataset):
 class IKNet(nn.Module):
     pose = 7
     dof = 4
-    hidden_units = [300, 200, 100, 50, 10]
+    hidden_units = [400, 300, 200, 100, 50]
 
     def __init__(self):
         super().__init__()
