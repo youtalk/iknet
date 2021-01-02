@@ -1,17 +1,22 @@
+import argparse
+
 import pandas as pd
+import pytorch_pfn_extras as ppe
+import pytorch_pfn_extras.training.extensions as extensions
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-from torch.utils.data import Dataset
+import torch.optim as optim
+from torch.utils.data import Dataset, DataLoader
+from torch.utils.data.dataset import Subset
 
 
 class IKDataset(Dataset):
     def __init__(self, kinematics_pose_csv, joint_states_csv):
         kinematics_pose = pd.read_csv(kinematics_pose_csv)
         joint_states = pd.read_csv(joint_states_csv)
-        input_ = kinematics_pose.iloc[:, 8:12].values
-        output = joint_states.iloc[:, 3:10].values
-
+        input_ = kinematics_pose.iloc[:, 3:10].values
+        output = joint_states.iloc[:, 8:12].values
         self.input_ = torch.tensor(input_, dtype=torch.float32)
         self.output = torch.tensor(output, dtype=torch.float32)
 
@@ -41,6 +46,91 @@ class IKNet(nn.Module):
         return self.fc5(x)
 
 
+def train(manager, args, model, device, train_loader):
+    while not manager.stop_trigger:
+        model.train()
+        for data, target in train_loader:
+            with manager.run_iteration(step_optimizers=["main"]):
+                data, target = data.to(device), target.to(device)
+                output = model(data)
+                loss = (output - target).norm()
+                ppe.reporting.report({"train/loss": loss.item()})
+                loss.backward()
+
+
+def test(args, model, device, data, target):
+    model.eval()
+    test_loss = 0
+    correct = 0
+    data, target = data.to(device), target.to(device)
+    output = model(data)
+    test_loss += (output - target).norm()
+    ppe.reporting.report({"val/loss": test_loss})
+    pred = output.argmax(dim=1, keepdim=True)
+    correct += pred.eq(target.view_as(pred)).sum().item()
+    ppe.reporting.report({"val/acc": correct / len(data)})
+
+
+def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        "--kinematics-pose-csv", type=str, default="./kinematics_pose.csv"
+    )
+    parser.add_argument("--joint-states-csv", type=str, default="./joint_states.csv")
+    parser.add_argument("--train-test-ratio", type=float, default=0.8)
+    parser.add_argument("--batch-size", type=int, default=100)
+    parser.add_argument("--epochs", type=int, default=10)
+    parser.add_argument("--lr", type=float, default=0.01)
+    parser.add_argument("--momentum", type=float, default=0.5)
+    args = parser.parse_args()
+
+    dataset = IKDataset(args.kinematics_pose_csv, args.joint_states_csv)
+    train_size = int(len(dataset) * args.train_test_ratio)
+    train_dataset = Subset(dataset, list(range(0, train_size)))
+    test_dataset = Subset(dataset, list(range(train_size, len(dataset))))
+    train_loader = DataLoader(train_dataset, batch_size=args.batch_size, shuffle=True)
+    test_loader = DataLoader(test_dataset, batch_size=args.batch_size, shuffle=True)
+
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    model = IKNet()
+    model.to(device)
+    optimizer = optim.SGD(model.parameters(), lr=args.lr, momentum=args.momentum)
+    my_extensions = [
+        extensions.LogReport(),
+        extensions.ProgressBar(),
+        extensions.observe_lr(optimizer=optimizer),
+        extensions.ParameterStatistics(model, prefix="model"),
+        extensions.VariableStatisticsPlot(model),
+        extensions.Evaluator(
+            test_loader,
+            model,
+            eval_func=lambda data, target: test(args, model, device, data, target),
+            progress_bar=True,
+        ),
+        extensions.PlotReport(["train/loss", "val/loss"], "epoch", filename="loss.png"),
+        extensions.PrintReport(
+            [
+                "epoch",
+                "iteration",
+                "train/loss",
+                "lr",
+                "val/loss",
+                "val/acc",
+            ]
+        ),
+    ]
+
+    trigger = None
+    manager = ppe.training.ExtensionsManager(
+        model,
+        optimizer,
+        args.epochs,
+        extensions=my_extensions,
+        iters_per_epoch=len(train_loader),
+        stop_trigger=trigger,
+    )
+    train(manager, args, model, device, train_loader)
+
+
 if __name__ == "__main__":
-    net = IKNet()
-    print(net)
+    main()
