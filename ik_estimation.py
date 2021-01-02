@@ -77,7 +77,6 @@ def main():
     parser.add_argument("--batch-size", type=int, default=100)
     parser.add_argument("--epochs", type=int, default=10)
     parser.add_argument("--lr", type=float, default=0.01)
-    parser.add_argument("--momentum", type=float, default=0.5)
     args = parser.parse_args()
 
     dataset = IKDataset(args.kinematics_pose_csv, args.joint_states_csv)
@@ -90,7 +89,7 @@ def main():
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     model = IKNet()
     model.to(device)
-    optimizer = optim.SGD(model.parameters(), lr=args.lr, momentum=args.momentum)
+    optimizer = optim.Adam(model.parameters(), lr=args.lr)
     my_extensions = [
         extensions.LogReport(),
         extensions.ProgressBar(),
@@ -115,7 +114,9 @@ def main():
         ),
     ]
 
-    trigger = None
+    trigger = ppe.training.triggers.EarlyStoppingTrigger(
+        check_trigger=(3, "epoch"), monitor="val/loss"
+    )
     manager = ppe.training.ExtensionsManager(
         model,
         optimizer,
