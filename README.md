@@ -113,5 +113,5 @@ optional arguments:
   --batch-size BATCH_SIZE
 
 $ python3 test_iknet.py
-Total loss = 0.0087115159034729
+Total loss = 0.006885118103027344
 ```
