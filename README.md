@@ -3,7 +3,8 @@
 IKNet is an inverse kinematics estimation with simple neural networks.
 This repository also contains the training and test dataset by manually moving the 4 DoF manipulator [ROBOTIS Open Manipulator X](https://emanual.robotis.com/docs/en/platform/openmanipulator_x/overview/).
 
-IKNet can be run on [NVIDIA Jetson Nano 2GB](https://nvda.ws/2HQcb1Y), [Jetson family](https://developer.nvidia.com/EMBEDDED/Jetson-modules) or PC with/without NVIDIA GPU.
+IKNet can be trained on tested on [NVIDIA Jetson Nano 2GB](https://nvda.ws/2HQcb1Y), [Jetson family](https://developer.nvidia.com/EMBEDDED/Jetson-modules) or PC with/without NVIDIA GPU.
+The training needs 900MB of GPU memory under default options.
 
 ## Data collection
 
@@ -94,6 +95,8 @@ epoch       iteration   train/loss  lr          val/loss
 65          195         0.00218555  0.01        0.00454468
 66          198         0.00216918  0.01        0.00459203
 ```
+
+![train/loss and val/loss](https://user-images.githubusercontent.com/579333/103491840-44a38880-4e6a-11eb-946c-222c46b97878.png)
 
 ## Test
 
