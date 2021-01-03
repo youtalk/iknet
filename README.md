@@ -39,6 +39,20 @@ optional arguments:
   --save-model
 ```
 
+### Demo
+
+```shell
+$ python3 train_iknet.py
+epoch       iteration   train/loss  lr          val/loss
+1           3           0.0168781   0.01        0.013123
+2           6           0.0158434   0.01        0.012754
+3           9           0.01492     0.01        0.0126269
+...
+64          192         0.00221506  0.01        0.0045823
+65          195         0.00218555  0.01        0.00454468
+66          198         0.00216918  0.01        0.00459203
+```
+
 ## Test
 
 ```shell
@@ -51,4 +65,11 @@ optional arguments:
   --kinematics-pose-csv KINEMATICS_POSE_CSV
   --joint-states-csv JOINT_STATES_CSV
   --batch-size BATCH_SIZE
+```
+
+### Demo
+
+```shell
+$ python3 test_iknet.py
+Total loss = 0.0087115159034729
 ```
