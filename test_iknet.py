@@ -3,7 +3,7 @@ import argparse
 import torch
 from torch.utils.data import DataLoader
 
-from deep_learning_ik import IKNet, IKDataset
+from iknet import IKNet, IKDataset
 
 
 def main():
@@ -17,7 +17,7 @@ def main():
 
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     model = IKNet()
-    model.load_state_dict(torch.load("deep_learning_ik.pt"))
+    model.load_state_dict(torch.load("iknet.pt"))
     model.to(device)
     model.eval()
 

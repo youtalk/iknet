@@ -7,7 +7,7 @@ import torch.optim as optim
 from torch.utils.data import DataLoader
 from torch.utils.data.dataset import Subset
 
-from deep_learning_ik import IKNet, IKDataset
+from iknet import IKNet, IKDataset
 
 
 def get_data_loaders(args):
@@ -96,7 +96,7 @@ def main():
     train(manager, args, model, device, train_loader)
 
     if args.save_model:
-        torch.save(model.state_dict(), "deep_learning_ik.pt")
+        torch.save(model.state_dict(), "iknet.pt")
 
 
 if __name__ == "__main__":
