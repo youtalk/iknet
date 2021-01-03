@@ -26,6 +26,19 @@ $ sed -i "1s/^/sec,nanosec,frame_id,name0,name1,name2,name3,name4,position0,posi
 
 ## Training
 
+### Set up
+
+Install PyTorch and the related packages.
+
+```shell
+$ conda install pytorch cudatoolkit=11.0 -c pytorch
+$ pip3 install pytorch-pfn-extras matplotlib
+```
+
+### Demo
+
+Train IKNet with training dataset which is inside data/train directory or prepared by yourself.
+
 ```shell
 $ python3 train_iknet.py --help
 usage: train_iknet.py [-h] [--kinematics-pose-csv KINEMATICS_POSE_CSV]
@@ -41,11 +54,7 @@ optional arguments:
   --epochs EPOCHS
   --lr LR
   --save-model
-```
 
-### Demo
-
-```shell
 $ python3 train_iknet.py
 epoch       iteration   train/loss  lr          val/loss
 1           3           0.0168781   0.01        0.013123
@@ -59,6 +68,10 @@ epoch       iteration   train/loss  lr          val/loss
 
 ## Test
 
+### Demo
+
+Evaluate accuracy of IKNet with test dataset which is inside data/test directory or prepared by yourself.
+
 ```shell
 $ python3 test_iknet.py --help
 usage: test_iknet.py [-h] [--kinematics-pose-csv KINEMATICS_POSE_CSV]
@@ -69,11 +82,7 @@ optional arguments:
   --kinematics-pose-csv KINEMATICS_POSE_CSV
   --joint-states-csv JOINT_STATES_CSV
   --batch-size BATCH_SIZE
-```
 
-### Demo
-
-```shell
 $ python3 test_iknet.py
 Total loss = 0.0087115159034729
 ```
