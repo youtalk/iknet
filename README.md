@@ -2,6 +2,12 @@
 
 ## Data collection
 
+## Set up
+
+### Demo
+
+First launch Open Manipulator X controller and turn the servo off to manually move it around.
+
 ```shell
 $ ros2 launch open_manipulator_x_controller open_manipulator_x_controller.launch.py
 ```
@@ -10,17 +16,19 @@ $ ros2 launch open_manipulator_x_controller open_manipulator_x_controller.launch
 $ ros2 service call /set_actuator_state open_manipulator_msgs/srv/SetActuatorState
 ```
 
+Then collect the pair of the kinematics pose and the joint angles by recording `/kinematics_pose` and `/joint_states` topics under csv format.
+
 ```shell
 $ ros2 topic echo --csv /kinematics_pose > kinematics_pose.csv & \
   ros2 topic echo --csv /joint_states > joint_states.csv
 ```
 
+Finally append the headers into them to load by Pandas `DataFrame`.
+
 ```shell
 $ sed -i "1s/^/sec,nanosec,frame_id,position_x,position_y,position_z,orientation_x,orientation_y,orientation_z,orientation_w,max_accelerations_scaling_factor,max_velocity_scaling_factor,tolerance\n/" kinematics_pose.csv
 $ sed -i "1s/^/sec,nanosec,frame_id,name0,name1,name2,name3,name4,position0,position1,position2,position3,position4,velocity0,velocity1,velocity2,velocity3,velocity4,effort0,effort1,effort2,effort3,effort4\n/" joint_states.csv
 ```
-
-### Demo
 
 [![IKNet data collection with Open Manipulator X](https://img.youtube.com/vi/dsHGYwkQ5Ag/0.jpg)](https://www.youtube.com/watch?v=dsHGYwkQ5Ag)
 
@@ -38,6 +46,7 @@ $ pip3 install pytorch-pfn-extras matplotlib
 ### Demo
 
 Train IKNet with training dataset which is inside data/train directory or prepared by yourself.
+The training may be stopped before maximum epochs by the early stopping trigger.
 
 ```shell
 $ python3 train_iknet.py --help
