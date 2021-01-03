@@ -74,9 +74,10 @@ def main():
     )
     parser.add_argument("--joint-states-csv", type=str, default="./joint_states.csv")
     parser.add_argument("--train-test-ratio", type=float, default=0.8)
-    parser.add_argument("--batch-size", type=int, default=1000)
+    parser.add_argument("--batch-size", type=int, default=10000)
     parser.add_argument("--epochs", type=int, default=100)
     parser.add_argument("--lr", type=float, default=0.01)
+    parser.add_argument("--save-model", action="store_true", default=False)
     args = parser.parse_args()
 
     dataset = IKDataset(args.kinematics_pose_csv, args.joint_states_csv)
@@ -126,6 +127,9 @@ def main():
         stop_trigger=trigger,
     )
     train(manager, args, model, device, train_loader)
+
+    if args.save_model:
+        torch.save(model.state_dict(), "deep_learning_ik.pt")
 
 
 if __name__ == "__main__":
