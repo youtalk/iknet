@@ -47,6 +47,17 @@ class IKNet(nn.Module):
         return self.fc6(x)
 
 
+def get_data_loaders(args):
+    dataset = IKDataset(args.kinematics_pose_csv, args.joint_states_csv)
+    train_size = int(len(dataset) * args.train_val_ratio)
+    train_dataset = Subset(dataset, list(range(0, train_size)))
+    val_dataset = Subset(dataset, list(range(train_size, len(dataset))))
+    train_loader = DataLoader(train_dataset, batch_size=args.batch_size, shuffle=True)
+    val_loader = DataLoader(val_dataset, batch_size=args.batch_size, shuffle=True)
+
+    return train_loader, val_loader
+
+
 def train(manager, args, model, device, train_loader):
     while not manager.stop_trigger:
         model.train()
@@ -59,7 +70,7 @@ def train(manager, args, model, device, train_loader):
                 loss.backward()
 
 
-def test(args, model, device, data, target):
+def validate(args, model, device, data, target):
     model.eval()
     data, target = data.to(device), target.to(device)
     output = model(data)
@@ -73,20 +84,14 @@ def main():
         "--kinematics-pose-csv", type=str, default="./kinematics_pose.csv"
     )
     parser.add_argument("--joint-states-csv", type=str, default="./joint_states.csv")
-    parser.add_argument("--train-test-ratio", type=float, default=0.8)
+    parser.add_argument("--train-val-ratio", type=float, default=0.8)
     parser.add_argument("--batch-size", type=int, default=10000)
     parser.add_argument("--epochs", type=int, default=100)
     parser.add_argument("--lr", type=float, default=0.01)
     parser.add_argument("--save-model", action="store_true", default=False)
     args = parser.parse_args()
 
-    dataset = IKDataset(args.kinematics_pose_csv, args.joint_states_csv)
-    train_size = int(len(dataset) * args.train_test_ratio)
-    train_dataset = Subset(dataset, list(range(0, train_size)))
-    test_dataset = Subset(dataset, list(range(train_size, len(dataset))))
-    train_loader = DataLoader(train_dataset, batch_size=args.batch_size, shuffle=True)
-    test_loader = DataLoader(test_dataset, batch_size=args.batch_size, shuffle=True)
-
+    train_loader, val_loader = get_data_loaders(args)
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     model = IKNet()
     model.to(device)
@@ -98,9 +103,9 @@ def main():
         extensions.ParameterStatistics(model, prefix="model"),
         extensions.VariableStatisticsPlot(model),
         extensions.Evaluator(
-            test_loader,
+            val_loader,
             model,
-            eval_func=lambda data, target: test(args, model, device, data, target),
+            eval_func=lambda data, target: validate(args, model, device, data, target),
             progress_bar=True,
         ),
         extensions.PlotReport(["train/loss", "val/loss"], "epoch", filename="loss.png"),
