@@ -74,8 +74,8 @@ def main():
     )
     parser.add_argument("--joint-states-csv", type=str, default="./joint_states.csv")
     parser.add_argument("--train-test-ratio", type=float, default=0.8)
-    parser.add_argument("--batch-size", type=int, default=100)
-    parser.add_argument("--epochs", type=int, default=10)
+    parser.add_argument("--batch-size", type=int, default=1000)
+    parser.add_argument("--epochs", type=int, default=100)
     parser.add_argument("--lr", type=float, default=0.01)
     args = parser.parse_args()
 
