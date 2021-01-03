@@ -1,4 +1,4 @@
-# IKNet: Inverse kinematics neural networks for Open Manipulator X
+# IKNet: Inverse kinematics neural networks for ROBOTIS Open Manipulator X
 
 IKNet is an inverse kinematics estimation with simple neural networks.
 This repository also contains the training and test dataset by manually moving the 4 DoF manipulator [ROBOTIS Open Manipulator X](https://emanual.robotis.com/docs/en/platform/openmanipulator_x/overview/).
