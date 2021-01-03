@@ -115,3 +115,8 @@ optional arguments:
 $ python3 test_iknet.py
 Total loss = 0.006885118103027344
 ```
+
+## Reference
+
+- Theofanidis, Michail & Sayed, Saif & Cloud, Joe & Brady, James & Makedon, Fillia. (2018). Kinematic Estimation with Neural Networks for Robotic Manipulators: 27th International Conference on Artificial Neural Networks, Rhodes, Greece, October 4–7, 2018, Proceedings, Part III. 10.1007/978-3-030-01424-7_77. 
+- Duka, Adrian-Vasile. (2014). Neural Network based Inverse Kinematics Solution for Trajectory Tracking of a Robotic Arm. Procedia Technology. 12. 20–27. 10.1016/j.protcy.2013.12.451.
