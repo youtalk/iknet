@@ -20,6 +20,10 @@ $ sed -i "1s/^/sec,nanosec,frame_id,position_x,position_y,position_z,orientation
 $ sed -i "1s/^/sec,nanosec,frame_id,name0,name1,name2,name3,name4,position0,position1,position2,position3,position4,velocity0,velocity1,velocity2,velocity3,velocity4,effort0,effort1,effort2,effort3,effort4\n/" joint_states.csv
 ```
 
+### Demo
+
+[![IKNet data collection with Open Manipulator X](https://img.youtube.com/vi/dsHGYwkQ5Ag/0.jpg)](https://www.youtube.com/watch?v=dsHGYwkQ5Ag)
+
 ## Training
 
 ```shell
