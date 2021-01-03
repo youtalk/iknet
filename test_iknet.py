@@ -9,9 +9,11 @@ from iknet import IKNet, IKDataset
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument(
-        "--kinematics-pose-csv", type=str, default="./kinematics_pose.csv"
+        "--kinematics-pose-csv", type=str, default="./data/test/kinematics_pose.csv"
     )
-    parser.add_argument("--joint-states-csv", type=str, default="./joint_states.csv")
+    parser.add_argument(
+        "--joint-states-csv", type=str, default="./data/test/joint_states.csv"
+    )
     parser.add_argument("--batch-size", type=int, default=10000)
     args = parser.parse_args()
 
