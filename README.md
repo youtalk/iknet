@@ -2,7 +2,22 @@
 
 ## Data collection
 
-## Set up
+### Set up
+
+Install ROS 2 on Ubuntu 18.04 by following the ROBOTIS e-Manual.
+
+[https://emanual.robotis.com/docs/en/platform/openmanipulator_x/ros2_setup/#ros-setup](https://emanual.robotis.com/docs/en/platform/openmanipulator_x/ros2_setup/#ros-setup)
+
+Then build some additional packages to modify a message `open_manipulator_msgs/msg/KinematicsPose`  to add timestamp.
+
+```shell
+$ mkdir -p ~/ros2/src && cd ~/ros2/src
+$ git clone https://github.com/youtalk/open_manipulator.git -b kinematics-pose-header
+$ git clone https://github.com/youtalk/open_manipulator_msgs.git -b kinematics-pose-header
+$ cd ~/ros2
+$ colcon build
+$ . install/setup.bash
+```
 
 ### Demo
 
