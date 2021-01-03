@@ -65,7 +65,7 @@ $ pip3 install pytorch-pfn-extras matplotlib
 
 ### Demo
 
-Train IKNet with training dataset which is inside data/train directory or prepared by yourself.
+Train IKNet with training dataset which is inside dataset/train directory or prepared by yourself.
 The training may be stopped before maximum epochs by the early stopping trigger.
 
 ```shell
@@ -99,7 +99,7 @@ epoch       iteration   train/loss  lr          val/loss
 
 ### Demo
 
-Evaluate accuracy of IKNet with test dataset which is inside data/test directory or prepared by yourself.
+Evaluate accuracy of IKNet with test dataset which is inside dataset/test directory or prepared by yourself.
 
 ```shell
 $ python3 test_iknet.py --help

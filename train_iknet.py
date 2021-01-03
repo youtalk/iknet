@@ -44,10 +44,12 @@ def validate(args, model, device, data, target):
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument(
-        "--kinematics-pose-csv", type=str, default="./data/training/kinematics_pose.csv"
+        "--kinematics-pose-csv",
+        type=str,
+        default="./dataset/train/kinematics_pose.csv",
     )
     parser.add_argument(
-        "--joint-states-csv", type=str, default="./data/training/joint_states.csv"
+        "--joint-states-csv", type=str, default="./dataset/train/joint_states.csv"
     )
     parser.add_argument("--train-val-ratio", type=float, default=0.8)
     parser.add_argument("--batch-size", type=int, default=10000)
