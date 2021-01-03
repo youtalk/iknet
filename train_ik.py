@@ -91,11 +91,14 @@ def main():
     parser.add_argument("--save-model", action="store_true", default=False)
     args = parser.parse_args()
 
-    train_loader, val_loader = get_data_loaders(args)
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     model = IKNet()
     model.to(device)
+    train_loader, val_loader = get_data_loaders(args)
     optimizer = optim.Adam(model.parameters(), lr=args.lr)
+    trigger = ppe.training.triggers.EarlyStoppingTrigger(
+        check_trigger=(3, "epoch"), monitor="val/loss"
+    )
     my_extensions = [
         extensions.LogReport(),
         extensions.ProgressBar(),
@@ -119,10 +122,6 @@ def main():
             ]
         ),
     ]
-
-    trigger = ppe.training.triggers.EarlyStoppingTrigger(
-        check_trigger=(3, "epoch"), monitor="val/loss"
-    )
     manager = ppe.training.ExtensionsManager(
         model,
         optimizer,
