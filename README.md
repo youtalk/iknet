@@ -106,7 +106,7 @@ The loss indicates the L1 norm of the joint angles. So the final networks solved
 ### Demo
 
 Evaluate accuracy of IKNet with test dataset which is inside dataset/test directory or prepared by yourself.
-The dataset/test dataset contains a 1-minutes movement at 100 [Hz] sampling.
+The dataset/test dataset contains a 1-minute movement at 100 [Hz] sampling.
 
 ```shell
 $ python3 test_iknet.py --help
