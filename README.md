@@ -96,6 +96,8 @@ epoch       iteration   train/loss  lr          val/loss
 66          198         0.00216918  0.01        0.00459203
 ```
 
+The loss indicates the L1 norm of the joint angles. So the final networks solved 0.00459203 [rad] accuracy in total.
+
 ![train/loss and val/loss](https://user-images.githubusercontent.com/579333/103491840-44a38880-4e6a-11eb-946c-222c46b97878.png)
 
 ## Test
