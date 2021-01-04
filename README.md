@@ -87,16 +87,16 @@ optional arguments:
 
 $ python3 train_iknet.py
 epoch       iteration   train/loss  lr          val/loss
-1           3           0.0168781   0.01        0.013123
-2           6           0.0158434   0.01        0.012754
-3           9           0.01492     0.01        0.0126269
+1           3           0.0188889   0.01        0.0130676
+2           6           0.0165503   0.01        0.0132546
+3           9           0.0167138   0.01        0.0134633
 ...
-64          192         0.00221506  0.01        0.0045823
-65          195         0.00218555  0.01        0.00454468
-66          198         0.00216918  0.01        0.00459203
+61          183         0.00267084  0.01        0.00428417
+62          186         0.00266047  0.01        0.00461381
+63          189         0.00260262  0.01        0.00461737
 ```
 
-The loss indicates the L1 norm of the joint angles. So the final networks solved 0.00459203 [rad] accuracy in total.
+The loss indicates the L1 norm of the joint angles. So the final networks solved 0.00461737 [rad] accuracy in total.
 
 ![train/loss and val/loss](https://user-images.githubusercontent.com/579333/103491840-44a38880-4e6a-11eb-946c-222c46b97878.png)
 
