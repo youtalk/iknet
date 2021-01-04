@@ -97,6 +97,10 @@ epoch       iteration   train/loss  lr          val/loss
 63          189         0.00260262  0.01        0.00461737
 ```
 
+The training can be run on NVIDIA Jetson Nano 2GB.
+
+[![IKNet training on NVIDIA Jetson Nano 2GB](https://img.youtube.com/vi/R_RtWAhCt8o/0.jpg)](https://www.youtube.com/watch?v=R_RtWAhCt8o)
+
 The loss indicates the L1 norm of the joint angles. So the final networks solved 0.00461737 [rad] accuracy on average.
 
 ![train/loss and val/loss](https://user-images.githubusercontent.com/579333/103491840-44a38880-4e6a-11eb-946c-222c46b97878.png)
