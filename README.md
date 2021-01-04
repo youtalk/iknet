@@ -66,7 +66,8 @@ $ pip3 install pytorch-pfn-extras matplotlib
 
 ### Demo
 
-Train IKNet with training dataset which is inside dataset/train directory or prepared by yourself.
+Train IKNet with training dataset which is inside dataset/train directory or prepared by yourself. The dataset/train dataset contains a 5-minutes movement at 100 [Hz] sampling.
+
 The training may be stopped before maximum epochs by the early stopping trigger.
 
 ```shell
@@ -96,7 +97,7 @@ epoch       iteration   train/loss  lr          val/loss
 63          189         0.00260262  0.01        0.00461737
 ```
 
-The loss indicates the L1 norm of the joint angles. So the final networks solved 0.00461737 [rad] accuracy in total.
+The loss indicates the L1 norm of the joint angles. So the final networks solved 0.00461737 [rad] accuracy on average.
 
 ![train/loss and val/loss](https://user-images.githubusercontent.com/579333/103491840-44a38880-4e6a-11eb-946c-222c46b97878.png)
 
@@ -105,6 +106,7 @@ The loss indicates the L1 norm of the joint angles. So the final networks solved
 ### Demo
 
 Evaluate accuracy of IKNet with test dataset which is inside dataset/test directory or prepared by yourself.
+The dataset/test dataset contains a 1-minutes movement at 100 [Hz] sampling.
 
 ```shell
 $ python3 test_iknet.py --help
