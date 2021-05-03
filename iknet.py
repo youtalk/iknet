@@ -24,16 +24,20 @@ class IKDataset(Dataset):
 class IKNet(nn.Module):
     pose = 7
     dof = 4
-    hidden_units = [400, 300, 200, 100, 50]
 
-    def __init__(self):
+    def __init__(self, trial):
         super().__init__()
-        self.fc1 = nn.Linear(self.pose, self.hidden_units[0])
-        self.fc2 = nn.Linear(self.hidden_units[0], self.hidden_units[1])
-        self.fc3 = nn.Linear(self.hidden_units[1], self.hidden_units[2])
-        self.fc4 = nn.Linear(self.hidden_units[2], self.hidden_units[3])
-        self.fc5 = nn.Linear(self.hidden_units[3], self.hidden_units[4])
-        self.fc6 = nn.Linear(self.hidden_units[4], self.dof)
+        fc2_input_dim = trial.suggest_int("fc2_input_dim", 10, 500)
+        fc3_input_dim = trial.suggest_int("fc3_input_dim", 10, 500)
+        fc4_input_dim = trial.suggest_int("fc4_input_dim", 10, 500)
+        fc5_input_dim = trial.suggest_int("fc5_input_dim", 10, 500)
+        fc6_input_dim = trial.suggest_int("fc6_input_dim", 10, 500)
+        self.fc1 = nn.Linear(self.pose, fc2_input_dim)
+        self.fc2 = nn.Linear(fc2_input_dim, fc3_input_dim)
+        self.fc3 = nn.Linear(fc3_input_dim, fc4_input_dim)
+        self.fc4 = nn.Linear(fc4_input_dim, fc5_input_dim)
+        self.fc5 = nn.Linear(fc5_input_dim, fc6_input_dim)
+        self.fc6 = nn.Linear(fc6_input_dim, self.dof)
 
     def forward(self, x):
         for layer in [self.fc1, self.fc2, self.fc3, self.fc4, self.fc5]:
