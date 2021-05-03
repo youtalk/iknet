@@ -5,11 +5,8 @@ version = "0.9"
 enable_black = true
 enable_flake8 = true
 enable_isort = true
-enable_mypy = true
+enable_mypy = false
 mypy_preset = "strict"
 line_length = 88
 py_version = "py37"
 isort_known_first_party = ["iknet"]
-
-[[tool.pysen.lint.mypy_targets]]
-  paths = ["."]
