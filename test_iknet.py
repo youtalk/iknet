@@ -3,20 +3,16 @@ import argparse
 import torch
 from torch.utils.data import DataLoader
 
-from iknet import IKNet, IKDataset
+from iknet import IKDataset, IKNet
 
 
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument(
-        "--kinematics-pose-csv",
-        type=str,
-        default="./dataset/test/kinematics_pose.csv"
+        "--kinematics-pose-csv", type=str, default="./dataset/test/kinematics_pose.csv"
     )
     parser.add_argument(
-        "--joint-states-csv",
-        type=str,
-        default="./dataset/test/joint_states.csv"
+        "--joint-states-csv", type=str, default="./dataset/test/joint_states.csv"
     )
     parser.add_argument("--batch-size", type=int, default=10000)
     args = parser.parse_args()
@@ -28,8 +24,7 @@ def main():
     model.eval()
 
     dataset = IKDataset(args.kinematics_pose_csv, args.joint_states_csv)
-    test_loader = DataLoader(
-        dataset, batch_size=args.batch_size, shuffle=False)
+    test_loader = DataLoader(dataset, batch_size=args.batch_size, shuffle=False)
 
     total_loss = 0.0
     for data, target in test_loader:
