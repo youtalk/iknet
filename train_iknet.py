@@ -7,7 +7,7 @@ import torch.optim as optim
 from torch.utils.data import DataLoader
 from torch.utils.data.dataset import Subset
 
-from iknet import IKNet, IKDataset
+from iknet import IKDataset, IKNet
 
 
 def get_data_loaders(args):

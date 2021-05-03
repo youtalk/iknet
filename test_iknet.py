@@ -3,7 +3,7 @@ import argparse
 import torch
 from torch.utils.data import DataLoader
 
-from iknet import IKNet, IKDataset
+from iknet import IKDataset, IKNet
 
 
 def main():
