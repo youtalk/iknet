@@ -15,8 +15,10 @@ def get_data_loaders(args):
     train_size = int(len(dataset) * args.train_val_ratio)
     train_dataset = Subset(dataset, list(range(0, train_size)))
     val_dataset = Subset(dataset, list(range(train_size, len(dataset))))
-    train_loader = DataLoader(train_dataset, batch_size=args.batch_size, shuffle=True)
-    val_loader = DataLoader(val_dataset, batch_size=args.batch_size, shuffle=True)
+    train_loader = DataLoader(
+        train_dataset, batch_size=args.batch_size, shuffle=True)
+    val_loader = DataLoader(
+        val_dataset, batch_size=args.batch_size, shuffle=True)
 
     return train_loader, val_loader
 
@@ -29,7 +31,8 @@ def train(manager, args, model, device, train_loader):
                 data, target = data.to(device), target.to(device)
                 output = model(data)
                 loss = (output - target).norm()
-                ppe.reporting.report({"train/loss": loss.item() / args.batch_size})
+                ppe.reporting.report(
+                    {"train/loss": loss.item() / args.batch_size})
                 loss.backward()
 
 
@@ -49,7 +52,9 @@ def main():
         default="./dataset/train/kinematics_pose.csv",
     )
     parser.add_argument(
-        "--joint-states-csv", type=str, default="./dataset/train/joint_states.csv"
+        "--joint-states-csv",
+        type=str,
+        default="./dataset/train/joint_states.csv"
     )
     parser.add_argument("--train-val-ratio", type=float, default=0.8)
     parser.add_argument("--batch-size", type=int, default=10000)
@@ -75,10 +80,12 @@ def main():
         extensions.Evaluator(
             val_loader,
             model,
-            eval_func=lambda data, target: validate(args, model, device, data, target),
+            eval_func=lambda data, target: validate(
+                args, model, device, data, target),
             progress_bar=True,
         ),
-        extensions.PlotReport(["train/loss", "val/loss"], "epoch", filename="loss.png"),
+        extensions.PlotReport(["train/loss", "val/loss"],
+                              "epoch", filename="loss.png"),
         extensions.PrintReport(
             [
                 "epoch",
