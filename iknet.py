@@ -37,6 +37,7 @@ class IKNet(nn.Module):
                     f"fc{i+2}_input_dim", self.min_dim, self.max_dim
                 )
 
+        print(f"input dimentsions: {self.hidden_units}")
         self.fc1 = nn.Linear(self.pose, self.hidden_units[0])
         self.fc2 = nn.Linear(self.hidden_units[0], self.hidden_units[1])
         self.fc3 = nn.Linear(self.hidden_units[1], self.hidden_units[2])
