@@ -33,7 +33,9 @@ class IKNet(nn.Module):
         self.hidden_units = [400, 300, 200, 100, 50]
         if trial is not None:
             for i in range(0, 5):
-                self.hidden_units[i] = trial.suggest_int(f"fc{i+2}_input_dim", self.min_dim, self.max_dim)
+                self.hidden_units[i] = trial.suggest_int(
+                    f"fc{i+2}_input_dim", self.min_dim, self.max_dim
+                )
 
         self.fc1 = nn.Linear(self.pose, self.hidden_units[0])
         self.fc2 = nn.Linear(self.hidden_units[0], self.hidden_units[1])
