@@ -12,9 +12,9 @@ def main():
         type=str,
         default="./iknet.pt",
     )
-    parser.add_argument("--x", type=float, default=0.0)
+    parser.add_argument("--x", type=float, default=0.1)
     parser.add_argument("--y", type=float, default=0.0)
-    parser.add_argument("--z", type=float, default=0.0)
+    parser.add_argument("--z", type=float, default=0.1)
     parser.add_argument("--qx", type=float, default=0.0)
     parser.add_argument("--qy", type=float, default=0.0)
     parser.add_argument("--qz", type=float, default=0.0)
@@ -26,7 +26,9 @@ def main():
     model.to(device)
     model.load_state_dict(torch.load(args.model))
     model.eval()
-    input_ = torch.FloatTensor([args.x, args.y, args.z, args.qx, args.qy, args.qz, args.qw])
+    input_ = torch.FloatTensor(
+        [args.x, args.y, args.z, args.qx, args.qy, args.qz, args.qw]
+    )
     input_ = input_.to(device)
     print(f"input: {input_}")
     output = model(input_)
