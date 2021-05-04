@@ -1,7 +1,6 @@
 import pandas as pd
 import torch
 import torch.nn as nn
-import torch.nn.functional as F
 from torch.utils.data import Dataset
 
 
@@ -24,18 +23,32 @@ class IKDataset(Dataset):
 class IKNet(nn.Module):
     pose = 7
     dof = 4
-    hidden_units = [400, 300, 200, 100, 50]
+    min_dim = 10
+    max_dim = 500
 
-    def __init__(self):
+    def __init__(self, trial=None):
         super().__init__()
-        self.fc1 = nn.Linear(self.pose, self.hidden_units[0])
-        self.fc2 = nn.Linear(self.hidden_units[0], self.hidden_units[1])
-        self.fc3 = nn.Linear(self.hidden_units[1], self.hidden_units[2])
-        self.fc4 = nn.Linear(self.hidden_units[2], self.hidden_units[3])
-        self.fc5 = nn.Linear(self.hidden_units[3], self.hidden_units[4])
-        self.fc6 = nn.Linear(self.hidden_units[4], self.dof)
+
+        self.hidden_units = [400, 300, 200, 100, 50]
+        self.dropout = 0.1
+        if trial is not None:
+            for i in range(0, 5):
+                self.hidden_units[i] = trial.suggest_int(
+                    f"fc{i+2}_input_dim", self.min_dim, self.max_dim
+                )
+            self.dropout = trial.suggest_float("dropout", 0.1, 0.5)
+
+        print(f"input dimentsions: {self.hidden_units}")
+        print(f"dropout: {self.dropout}")
+        layers = []
+        input_dim = self.pose
+        for output_dim in self.hidden_units:
+            layers.append(nn.Linear(input_dim, output_dim))
+            layers.append(nn.ReLU())
+            layers.append(nn.Dropout(self.dropout))
+            input_dim = output_dim
+        layers.append(nn.Linear(input_dim, self.dof))
+        self.layers = nn.Sequential(*layers)
 
     def forward(self, x):
-        for layer in [self.fc1, self.fc2, self.fc3, self.fc4, self.fc5]:
-            x = F.relu(layer(x))
-        return self.fc6(x)
+        return self.layers(x)
