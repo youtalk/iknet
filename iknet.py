@@ -31,6 +31,7 @@ class IKNet(nn.Module):
         super().__init__()
 
         self.hidden_units = [400, 300, 200, 100, 50]
+        self.dropout_ratios = [0.0] * 5
         if trial is not None:
             for i in range(0, 5):
                 self.hidden_units[i] = trial.suggest_int(
@@ -38,14 +39,14 @@ class IKNet(nn.Module):
                 )
 
         print(f"input dimentsions: {self.hidden_units}")
-        self.fc1 = nn.Linear(self.pose, self.hidden_units[0])
-        self.fc2 = nn.Linear(self.hidden_units[0], self.hidden_units[1])
-        self.fc3 = nn.Linear(self.hidden_units[1], self.hidden_units[2])
-        self.fc4 = nn.Linear(self.hidden_units[2], self.hidden_units[3])
-        self.fc5 = nn.Linear(self.hidden_units[3], self.hidden_units[4])
-        self.fc6 = nn.Linear(self.hidden_units[4], self.dof)
+        layers = []
+        input_dim = self.pose
+        for output_dim in self.hidden_units:
+            layers.append(nn.Linear(input_dim, output_dim))
+            layers.append(nn.ReLU())
+            input_dim = output_dim
+        layers.append(nn.Linear(input_dim, self.dof))
+        self.layers = nn.Sequential(*layers)
 
     def forward(self, x):
-        for layer in [self.fc1, self.fc2, self.fc3, self.fc4, self.fc5]:
-            x = F.relu(layer(x))
-        return self.fc6(x)
+        return self.layers(x)
