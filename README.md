@@ -71,10 +71,10 @@ Train IKNet with training dataset which is inside dataset/train directory or pre
 The training may be stopped before maximum epochs by the early stopping trigger.
 
 ```shell
-$ python3 train_iknet.py --help
-usage: train_iknet.py [-h] [--kinematics-pose-csv KINEMATICS_POSE_CSV]
-                      [--joint-states-csv JOINT_STATES_CSV] [--train-val-ratio TRAIN_VAL_RATIO]
-                      [--batch-size BATCH_SIZE] [--epochs EPOCHS] [--lr LR] [--save-model]
+$ python3 iknet_training.py --help
+usage: iknet_training.py [-h] [--kinematics-pose-csv KINEMATICS_POSE_CSV]
+                         [--joint-states-csv JOINT_STATES_CSV] [--train-val-ratio TRAIN_VAL_RATIO]
+                         [--batch-size BATCH_SIZE] [--epochs EPOCHS] [--lr LR] [--save-model]
 
 optional arguments:
   -h, --help            show this help message and exit
@@ -86,7 +86,7 @@ optional arguments:
   --lr LR
   --save-model
 
-$ python3 train_iknet.py
+$ python3 iknet_training.py
 epoch       iteration   train/loss  lr          val/loss
 1           3           0.0188889   0.01        0.0130676
 2           6           0.0165503   0.01        0.0132546
@@ -113,8 +113,8 @@ Evaluate accuracy of IKNet with test dataset which is inside dataset/test direct
 The dataset/test dataset contains a 1-minute movement at 100 [Hz] sampling.
 
 ```shell
-$ python3 test_iknet.py --help
-usage: test_iknet.py [-h] [--kinematics-pose-csv KINEMATICS_POSE_CSV]
+$ python3 iknet_test.py --help
+usage: iknet_test.py [-h] [--kinematics-pose-csv KINEMATICS_POSE_CSV]
                      [--joint-states-csv JOINT_STATES_CSV] [--batch-size BATCH_SIZE]
 
 optional arguments:
@@ -123,7 +123,7 @@ optional arguments:
   --joint-states-csv JOINT_STATES_CSV
   --batch-size BATCH_SIZE
 
-$ python3 test_iknet.py
+$ python3 iknet_test.py
 Total loss = 0.006885118103027344
 ```
 
