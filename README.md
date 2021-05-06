@@ -141,6 +141,7 @@ Then run `iknet_inference.py` to input the pose (position and orientation) and m
 Note that the orientation is described by quaternion (`qx`, `qy`, `qz`, `qw`).
 
 ```shell
+$ . ~/ros2/install/setup.bash
 $ python3 iknet_inference.py --help
 usage: iknet_inference.py [-h] [--model MODEL] [--x X] [--y Y] [--z Z]
                           [--qx QX] [--qy QY] [--qz QZ] [--qw QW]
