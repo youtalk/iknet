@@ -25,24 +25,28 @@ class IKNet(nn.Module):
     dof = 4
     min_dim = 10
     max_dim = 500
+    min_dropout = 0.1
+    max_dropout = 0.5
 
     def __init__(self, trial=None):
         super().__init__()
 
-        self.hidden_units = [400, 300, 200, 100, 50]
+        self.input_dims = [400, 300, 200, 100, 50]
         self.dropout = 0.1
         if trial is not None:
             for i in range(0, 5):
-                self.hidden_units[i] = trial.suggest_int(
+                self.input_dims[i] = trial.suggest_int(
                     f"fc{i+2}_input_dim", self.min_dim, self.max_dim
                 )
-            self.dropout = trial.suggest_float("dropout", 0.1, 0.5)
+            self.dropout = trial.suggest_float(
+                "dropout", self.min_dropout, self.max_dropout
+            )
 
-        print(f"input dimentsions: {self.hidden_units}")
+        print(f"input dimentsions: {self.input_dims}")
         print(f"dropout: {self.dropout}")
         layers = []
         input_dim = self.pose
-        for output_dim in self.hidden_units:
+        for output_dim in self.input_dims:
             layers.append(nn.Linear(input_dim, output_dim))
             layers.append(nn.ReLU())
             layers.append(nn.Dropout(self.dropout))
