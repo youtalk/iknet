@@ -126,6 +126,46 @@ optional arguments:
 $ python3 iknet_test.py
 Total loss = 0.006885118103027344
 ```
+## Inference
+
+### Demo
+
+Estimate the inverse kinematics of IKNet using Open Manipulator X.
+First launch Open Manipulator X controller.
+
+```shell
+$ ros2 launch open_manipulator_x_controller open_manipulator_x_controller.launch.py
+```
+
+Then run `iknet_inference.py` to input the pose (position and orientation) and move the robot.
+Note that the orientation is described by quaternion (`qx`, `qy`, `qz`, `qw`).
+
+```shell
+$ python3 iknet_inference.py --help
+usage: iknet_inference.py [-h] [--model MODEL] [--x X] [--y Y] [--z Z]
+                          [--qx QX] [--qy QY] [--qz QZ] [--qw QW]
+
+optional arguments:
+  -h, --help     show this help message and exit
+  --model MODEL
+  --x X
+  --y Y
+  --z Z
+  --qx QX
+  --qy QY
+  --qz QZ
+  --qw QW
+
+$ python3 iknet_inference.py --x 0.1 --z 0.1
+input dimentsions: [400, 300, 200, 100, 50]
+dropout: 0.1
+input: tensor([0.1000, 0.0000, 0.1000, 0.0000, 0.0000, 0.0000, 1.0000],
+       device='cuda:0')
+output: tensor([-0.0769, -0.9976,  1.3582, -0.2827], device='cuda:0',
+       grad_fn=<AddBackward0>)
+```
+
+[![Inverse kinematics estimation by IKNet](https://img.youtube.com/vi/62_zIF_PvxU/0.jpg)](https://www.youtube.com/watch?v=62_zIF_PvxU)
 
 ## Reference
 
