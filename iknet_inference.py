@@ -1,11 +1,19 @@
 import argparse
+import sys
 
+import rclpy
 import torch
+from open_manipulator_msgs.msg import JointPosition
+from open_manipulator_msgs.srv import SetJointPosition
 
 from iknet import IKNet
 
 
 def main():
+    rclpy.init(args=sys.argv)
+    node = rclpy.create_node("iknet_inference")
+    set_joint_position = node.create_client(SetJointPosition, "/goal_joint_space_path")
+
     parser = argparse.ArgumentParser()
     parser.add_argument(
         "--model",
@@ -33,6 +41,23 @@ def main():
     print(f"input: {input_}")
     output = model(input_)
     print(f"output: {output}")
+
+    joint_position = JointPosition()
+    joint_position.joint_name = [f"joint{i+1}" for i in range(4)]
+    joint_position.position = [output[i].item() for i in range(4)]
+    request = SetJointPosition.Request()
+    request.joint_position = joint_position
+    request.path_time = 4.0
+
+    future = set_joint_position.call_async(request)
+    rclpy.spin_until_future_complete(node, future)
+    if future.result() is not None:
+        print(f"result: {future.result().is_planned}")
+    else:
+        print(f"exception: {future.exception()}")
+
+    node.destroy_node()
+    rclpy.shutdown()
 
 
 if __name__ == "__main__":
