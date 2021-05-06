@@ -10,7 +10,6 @@ from torch.utils.data.dataset import Subset
 
 from iknet import IKDataset, IKNet
 
-
 args = None
 
 
