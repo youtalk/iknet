@@ -21,15 +21,14 @@ def main():
     args = parser.parse_args()
 
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    model = IKNet()
-    model.to(device)
+    model = IKNet().to(device)
     model.load_state_dict(torch.load(args.input_model))
     model.eval()
-    input_ = torch.FloatTensor(
-        [0.1, 0.0, 0.1, 0.0, 0.0, 0.0, 1.0]
-    )
-    input_ = input_.to(device)
-    model_trt = torch2trt(model, [input_])
+    print(model)
+
+    input_ = torch.ones(7).to(device)
+    model_trt = torch2trt(model, [input_], fp16_mode=True)
+    print(model_trt)
     torch.save(model_trt.state_dict(), args.output_model)
 
 
