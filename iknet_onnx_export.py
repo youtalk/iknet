@@ -27,7 +27,9 @@ def main():
     print(model)
 
     input_ = torch.ones(7).to(device)
-    torch.onnx.export(model, input_, args.output_model, input_names=["pose"], output_names=["joints"])
+    torch.onnx.export(
+        model, input_, args.output_model, input_names=["pose"], output_names=["joints"]
+    )
 
 
 if __name__ == "__main__":
