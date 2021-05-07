@@ -71,14 +71,14 @@ def main():
         extensions.ProgressBar(),
         extensions.observe_lr(optimizer=optimizer),
         extensions.ParameterStatistics(model, prefix="model"),
-        extensions.VariableStatisticsPlot(model),
+        # extensions.VariableStatisticsPlot(model),
         extensions.Evaluator(
             val_loader,
             model,
             eval_func=lambda data, target: validate(args, model, device, data, target),
             progress_bar=True,
         ),
-        extensions.PlotReport(["train/loss", "val/loss"], "epoch", filename="loss.png"),
+        # extensions.PlotReport(["train/loss", "val/loss"], "epoch", filename="loss.png"),
         extensions.PrintReport(
             [
                 "epoch",
