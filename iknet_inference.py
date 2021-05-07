@@ -18,7 +18,7 @@ def main():
     parser.add_argument(
         "--model",
         type=str,
-        default="./iknet.pt",
+        default="./iknet.pth",
     )
     parser.add_argument(
         "--trt", action="store_true", default=False

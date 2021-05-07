@@ -100,7 +100,7 @@ def main():
     train(manager, args, model, device, train_loader)
 
     if args.save_model:
-        torch.save(model.state_dict(), "iknet.pt")
+        torch.save(model.state_dict(), "iknet.pth")
 
 
 if __name__ == "__main__":

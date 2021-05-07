@@ -11,12 +11,12 @@ def main():
     parser.add_argument(
         "--input-model",
         type=str,
-        default="./iknet.pt",
+        default="./iknet.pth",
     )
     parser.add_argument(
         "--output-model",
         type=str,
-        default="./iknet-trt.pt",
+        default="./iknet-trt.pth",
     )
     args = parser.parse_args()
 
