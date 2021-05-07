@@ -28,7 +28,12 @@ def main():
 
     input_ = torch.ones(7).to(device)
     torch.onnx.export(
-        model, input_, args.output_model, input_names=["pose"], output_names=["joints"]
+        model,
+        input_,
+        args.output_model,
+        verbose=True,
+        input_names=["pose"],
+        output_names=["joints"],
     )
 
 
