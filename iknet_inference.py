@@ -20,6 +20,9 @@ def main():
         type=str,
         default="./iknet.pt",
     )
+    parser.add_argument(
+        "--trt", action="store_true", default=False
+    )
     parser.add_argument("--x", type=float, default=0.1)
     parser.add_argument("--y", type=float, default=0.0)
     parser.add_argument("--z", type=float, default=0.1)
@@ -30,7 +33,11 @@ def main():
     args = parser.parse_args()
 
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    model = IKNet()
+    if not args.trt:
+        model = IKNet()
+    else:
+        from torch2trt import TRTModule
+        model = TRTModule()
     model.to(device)
     model.load_state_dict(torch.load(args.model))
     model.eval()
