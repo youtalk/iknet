@@ -19,7 +19,7 @@ def main():
 
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     model = IKNet()
-    model.load_state_dict(torch.load("iknet.pt"))
+    model.load_state_dict(torch.load("iknet.pth"))
     model.to(device)
     model.eval()
 
