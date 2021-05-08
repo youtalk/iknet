@@ -1,5 +1,6 @@
 import argparse
 import sys
+import time
 
 import rclpy
 import torch
@@ -39,15 +40,22 @@ def main():
     model.to(device)
     model.load_state_dict(torch.load(args.model))
     model.eval()
-    pose = [args.x, args.y, args.z, args.qx, args.qy, args.qz, args.qw]
-    if not args.trt:
-        input_ = torch.FloatTensor(pose)
-    else:
-        input_ = torch.FloatTensor([pose])
-    input_ = input_.to(device)
-    print(f"input: {input_}")
-    output = model(input_)
-    print(f"output: {output}")
+    i = 0
+    imax = 1000
+    start = time.time()
+    while i < imax:
+        pose = [args.x, args.y, args.z, args.qx, args.qy, args.qz, args.qw]
+        if not args.trt:
+            input_ = torch.FloatTensor(pose)
+        else:
+            input_ = torch.FloatTensor([pose])
+        input_ = input_.to(device)
+        # print(f"input: {input_}")
+        output = model(input_)
+        # print(f"output: {output}")
+        i += 1
+    elapsed = time.time() - start
+    print(f"elapsed: {elapsed / imax}")
 
     joint_position = JointPosition()
     joint_position.joint_name = [f"joint{i+1}" for i in range(4)]
