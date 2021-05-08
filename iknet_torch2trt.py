@@ -26,7 +26,7 @@ def main():
     model.eval()
     print(model)
 
-    input_ = torch.ones(7).to(device)
+    input_ = torch.ones(1, 7).to(device)
     model_trt = torch2trt(model, [input_], fp16_mode=True)
     print(model_trt)
     torch.save(model_trt.state_dict(), args.output_model)
