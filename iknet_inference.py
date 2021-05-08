@@ -54,8 +54,11 @@ def main():
         output = model(input_)
         # print(f"output: {output}")
         i += 1
+        if i % 100 == 0:
+            print(i)
     elapsed = time.time() - start
     print(f"elapsed: {elapsed / imax}")
+    print(f"hz: {imax / elapsed}")
 
     joint_position = JointPosition()
     joint_position.joint_name = [f"joint{i+1}" for i in range(4)]
