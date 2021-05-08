@@ -35,7 +35,6 @@ def main():
         model = IKNet()
     else:
         from torch2trt import TRTModule
-
         model = TRTModule()
     model.to(device)
     model.load_state_dict(torch.load(args.model))
