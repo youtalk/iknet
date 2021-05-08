@@ -41,9 +41,15 @@ def main():
     model.to(device)
     model.load_state_dict(torch.load(args.model))
     model.eval()
-    input_ = torch.FloatTensor(
-        [args.x, args.y, args.z, args.qx, args.qy, args.qz, args.qw]
-    )
+    pose = [args.x, args.y, args.z, args.qx, args.qy, args.qz, args.qw]
+    if not args.trt:
+        input_ = torch.FloatTensor(
+            pose
+        )
+    else:
+        input_ = torch.FloatTensor(
+            [pose]
+        )
     input_ = input_.to(device)
     print(f"input: {input_}")
     output = model(input_)
@@ -51,7 +57,10 @@ def main():
 
     joint_position = JointPosition()
     joint_position.joint_name = [f"joint{i+1}" for i in range(4)]
-    joint_position.position = [output[i].item() for i in range(4)]
+    if not args.trt:
+        joint_position.position = [output[i].item() for i in range(4)]
+    else:
+        joint_position.position = [output[0][i].item() for i in range(4)]
     request = SetJointPosition.Request()
     request.joint_position = joint_position
     request.path_time = 4.0
