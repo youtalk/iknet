@@ -143,12 +143,13 @@ Note that the orientation is described by quaternion (`qx`, `qy`, `qz`, `qw`).
 ```shell
 $ . ~/ros2/install/setup.bash
 $ python3 iknet_inference.py --help
-usage: iknet_inference.py [-h] [--model MODEL] [--x X] [--y Y] [--z Z]
+usage: iknet_inference.py [-h] [--model MODEL] [--trt] [--x X] [--y Y] [--z Z]
                           [--qx QX] [--qy QY] [--qz QZ] [--qw QW]
 
 optional arguments:
   -h, --help     show this help message and exit
   --model MODEL
+  --trt
   --x X
   --y Y
   --z Z
@@ -167,6 +168,32 @@ output: tensor([-0.0769, -0.9976,  1.3582, -0.2827], device='cuda:0',
 ```
 
 [![Inverse kinematics estimation by IKNet](https://img.youtube.com/vi/62_zIF_PvxU/0.jpg)](https://www.youtube.com/watch?v=62_zIF_PvxU)
+
+### Demo with TensorRT
+
+If you would like to use the inference with [TensorRT](https://developer.nvidia.com/tensorrt), first convert the PyTorch model to TensorRT enabled model using [torch2trt](https://github.com/NVIDIA-AI-IOT/torch2trt).
+
+```shell
+$ python3 iknet_trt_export.py --help
+usage: iknet_trt_export.py [-h] [--input-model INPUT_MODEL] [--output-model OUTPUT_MODEL]
+
+optional arguments:
+  -h, --help            show this help message and exit
+  --input-model INPUT_MODEL
+  --output-model OUTPUT_MODEL
+```
+
+Then run the `iknet_inference.py` mentioned above with the options.
+
+```shell
+$ python3 iknet_inference.py --trt --model iknet-trt.pth --x 0.1 --z 0.1
+input dimentsions: [400, 300, 200, 100, 50]
+dropout: 0.1
+input: tensor([0.1000, 0.0000, 0.1000, 0.0000, 0.0000, 0.0000, 1.0000],
+       device='cuda:0')
+output: tensor([-0.0769, -0.9976,  1.3582, -0.2827], device='cuda:0',
+       grad_fn=<AddBackward0>)
+```
 
 ## Reference
 
