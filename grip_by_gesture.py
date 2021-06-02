@@ -24,12 +24,12 @@ class GripByGesture(Node):
         self.prev_time = curr_time
 
         self.get_logger().info(msg.data)
-        if msg.data in ("fist", "pan"):
+        if msg.data in ("fist", "pan", "ok", "stop"):
             joint_position = JointPosition()
             joint_position.joint_name = ["gripper"]
             position = self.delta  # * dt.nanoseconds * 1e-9
             joint_position.position = [
-                position if msg.data == "pan" else -position]
+                -position if msg.data == "fist" else position]
             request = SetJointPosition.Request()
             request.joint_position = joint_position
             _ = self.goal_tool_control.call_async(request)
